@@ -23,7 +23,7 @@ jobs:
       DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       BCRYPT_ROUNDS: ${{ secrets.BCRYPT_ROUNDS }}
-      NODE_ENV: 'production' 
+      NODE_ENV: '' 
 
     steps:
       - uses: actions/checkout@v4
