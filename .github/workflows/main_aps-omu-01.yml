@@ -6,9 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-  NODE_ENV: production
-  SCM_DO_BUILD_DURING_DEPLOYMENT: false
-
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -21,6 +18,8 @@ jobs:
       DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       BCRYPT_ROUNDS: ${{ secrets.BCRYPT_ROUNDS }}
+      NODE_ENV: production
+      SCM_DO_BUILD_DURING_DEPLOYMENT: false
 
     steps:
       - uses: actions/checkout@v4
