@@ -32,13 +32,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
         env:
-          NODE_ENV: development
+          NODE_ENV: production
 
       - name: Build Next.js app
         run: npm run build
 
-      - name: Upload artifacts
-        run: ls -R .next/
+      - name: Prepare deployment package
+        run: |
+          mkdir deploy_package
+          cp -r .next deploy_package/
+          cp -r public deploy_package/
+          cp package.json deploy_package/
+          # node_modulesはproductionのみコピー
+          npm prune --production
+          cp -r node_modules deploy_package/
+          cd deploy_package
+          zip -r ../deploy.zip .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
