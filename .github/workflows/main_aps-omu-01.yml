@@ -7,21 +7,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      BCRYPT_ROUNDS: ${{ secrets.BCRYPT_ROUNDS }}
+      NODE_ENV: 'production'
+      SCM_DO_BUILD_DURING_DEPLOYMENT: 'true'
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build
+
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'aps-OMU-01'
           slot-name: 'Production'
-          package: '.'   # リポジトリのルート（コード一式）をそのまま渡す
+          package: '.'  
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2C6C767FEEAD45CA9BAD0CA08B91C5FB }}
