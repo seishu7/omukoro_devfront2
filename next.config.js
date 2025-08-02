@@ -1,13 +1,6 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: 'standalone',
-};
-
-export default nextConfig;
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   webpack(config) {
     config.module.rules.push({
       test: /\.(js|ts|tsx)$/,
